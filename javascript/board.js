@@ -1,5 +1,4 @@
 var boardGraph = (function() {
-  // var tiles;
   var upTiles,
       downTiles,
       size;
@@ -101,8 +100,8 @@ var boardGraph = (function() {
   };
 }());
 
-(function() {
-  boardGraph.createBoard();
-  boardGraph.printUpTiles();
-  boardGraph.printDownTiles();
-}());
+// (function() {
+//   boardGraph.createBoard();
+//   boardGraph.printUpTiles();
+//   boardGraph.printDownTiles();
+// }());
