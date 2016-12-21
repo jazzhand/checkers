@@ -80,10 +80,11 @@ var BoardGraph = (function() {
 }());
 
 var BoardThing = (function() {
-  const TOP_LEFT = 0, // DIRECTION TOP LEFT
-        TOP_RIGHT = 1, // DIRECTION TOP RIGHT
-        BOT_LEFT = 2, // DIRECTION BOTTOM LEFT
-        BOT_RIGHT = 3; // DIRECTION BOTTOM RIGHT
+  const EMPTY_TILE = 0,
+        WHITE_MAN = 1,
+        BLACK_MAN = 2,
+        WHITE_KING = 3,
+        BLACK_KING = 4;
 
   /**
   * A private object representing all the pieces and their locations on
