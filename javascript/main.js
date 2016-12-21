@@ -1,4 +1,4 @@
-(function(board) {
+(function(graph) {
   var canvas = document.getElementById("canvas"),
       canvasWidth = canvas.width,
       context = canvas.getContext("2d"),
@@ -8,14 +8,18 @@
         BLACK_PIECE = 1,
         FILL_WHITE_1 = "#efefe6",
         FILL_WHITE_2 = "#d6d6c6",
-        FILL_BLACK_1 = "#555555",
-        FILL_BLACK_2 = "#777777";
+        FILL_BLACK_1 = "#777777",
+        FILL_BLACK_2 = "#555555";
 
   function xOfBlock(num) {
     var mod4 = num % 4;
     var mod8 = num % 8;
     var lvl = Math.floor(mod8 / 4);
     return blockWidth/2 + mod4 * (2 * blockWidth) + lvl * blockWidth;
+  }
+
+  function yOfBlock(num) {
+    return canvasWidth - blockWidth * (Math.floor(num / 4) + 0.5);
   }
 
   var renderer = (function() {
@@ -59,11 +63,11 @@
 
       drawPieceInBlock: function(block, col) {
         var locX = xOfBlock(block),
-            locY = canvasWidth - blockWidth * (Math.floor(block / 4) + 0.5);
+            locY = yOfBlock(block);
 
         // Outer circle
         context.beginPath();
-        context.arc(locX, locY, blockWidth/2 - 8, 0, 2 * Math.PI);
+        context.arc(locX, locY, 32, 0, 2 * Math.PI);
         if (col === WHITE_PIECE) {
           context.fillStyle = FILL_WHITE_1;
         } else {
@@ -84,7 +88,6 @@
     };
   }());
 
-  board.createBoard();
   for (var i = 0; i < 12; i++) {
     renderer.drawPieceInBlock(i, WHITE_PIECE);
   }

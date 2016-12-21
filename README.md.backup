@@ -24,7 +24,3 @@ indices.
 
 As an example, consider the board index **2**. It's *top-left* index is **5** and it's 
 *top-right* index is **6**. The *bottom-left* and *bottom-right* indices are **-1**.
-
-## Implementation:
-
-This program will be coded in Javascript 
