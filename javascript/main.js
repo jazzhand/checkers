@@ -1,15 +1,15 @@
-(function(graph) {
+(function(CM) {
   var canvas = document.getElementById("canvas"),
       canvasWidth = canvas.width,
       context = canvas.getContext("2d"),
       blockWidth = 80;
 
-  const WHITE_PIECE = 0,
-        BLACK_PIECE = 1,
-        FILL_WHITE_1 = "#efefe6",
+  const FILL_WHITE_1 = "#efefe6",
         FILL_WHITE_2 = "#d6d6c6",
+        FILL_WHITE_3 = "#3388cc",
         FILL_BLACK_1 = "#777777",
-        FILL_BLACK_2 = "#555555";
+        FILL_BLACK_2 = "#555555",
+        FILL_BLACK_3 = FILL_WHITE_3;
 
   function xOfBlock(num) {
     var mod4 = num % 4;
@@ -22,104 +22,51 @@
     return canvasWidth - blockWidth * (Math.floor(num / 4) + 0.5);
   }
 
-  var renderer = (function() {
-    return {
-      drawPiece: function(x, y, col) {
-        context.beginPath();
-        context.fillStyle = FILL_WHITE_1;
-        context.arc(x, y, 32, 0, 2 * Math.PI);
-        context.fill();
-
-        context.beginPath();
-        context.arc(x, y, 26, 0, 2 * Math.PI);
-        context.fillStyle = FILL_WHITE_2;
-        context.fill();
-      },
-      drawPieceInGrid: function(x, y, col) {
-        var delta = canvasWidth/8,
-            locX = delta * (x + 0.5),
-            locY = delta * (y + 0.5);
-
-        // Outer circle
-        context.beginPath();
-        context.arc(locX, locY, delta/2 - 8, 0, 2 * Math.PI);
-        if (col === WHITE_PIECE) {
-          context.fillStyle = FILL_WHITE_1;
-        } else {
-          context.fillStyle = FILL_BLACK_1;
-        }
-        context.fill();
-
-        // Inner circle
-        context.beginPath();
-        context.arc(locX, locY, 26, 0, 2 * Math.PI);
-        if (col === WHITE_PIECE) {
-          context.fillStyle = FILL_WHITE_2;
-        } else {
-          context.fillStyle = FILL_BLACK_2;
-        }
-        context.fill();
-      },
-
-      drawPieceInBlock: function(block, col) {
-        var locX = xOfBlock(block),
-            locY = yOfBlock(block);
-
-        // Outer circle
-        context.beginPath();
-        context.arc(locX, locY, 32, 0, 2 * Math.PI);
-        if (col === WHITE_PIECE) {
-          context.fillStyle = FILL_WHITE_1;
-        } else {
-          context.fillStyle = FILL_BLACK_1;
-        }
-        context.fill();
-
-        // Inner circle
-        context.beginPath();
-        context.arc(locX, locY, 26, 0, 2 * Math.PI);
-        if (col === WHITE_PIECE) {
-          context.fillStyle = FILL_WHITE_2;
-        } else {
-          context.fillStyle = FILL_BLACK_2;
-        }
-        context.fill();
-      }
-    };
-  }());
-
-  for (var i = 0; i < 12; i++) {
-    renderer.drawPieceInBlock(i, WHITE_PIECE);
+  function drawCircle(locX, locY, r, col) {
+    context.beginPath();
+    context.arc(locX, locY, r, 0, 2 * Math.PI);
+    context.fillStyle = col;
+    context.fill();
   }
-  renderer.drawPieceInBlock(31, BLACK_PIECE)
-}(boardGraph));
 
-// var lastStamp;
-//
-// function update(timestamp) {
-//   var delta;
-//
-//   delta = timestamp - lastStamp;
-//   lastStamp = timestamp;
-//
-//   context.clearRect(0, 0, 640, 640);
-//   drawPiece(40,40, "white");
-//   // context.fillRect(Math.random()*640, Math.random()*640, 50, 50);
-//
-//   window.requestAnimationFrame(update);
-// }
-//
-// function drawPiece(x, y, col) {
-//   context.beginPath();
-//   context.arc(x, y, 32, 0, 2 * Math.PI);
-//   context.fillStyle = "#efefe6";
-//   context.fill();
-//
-//   context.beginPath();
-//   context.arc(x, y, 26, 0, 2 * Math.PI);
-//   context.fillStyle = "#e0e0d6";
-//   context.fill();
-// }
-//
-// lastStamp = Date.now();
-// window.requestAnimationFrame(update);
+  function drawPieceInBlock(block, type) {
+    var locX = xOfBlock(block),
+        locY = yOfBlock(block);
+
+    switch (type) {
+      case CM.WHITE_MAN:
+        drawCircle(locX, locY, 32, FILL_WHITE_1);
+        drawCircle(locX, locY, 26, FILL_WHITE_2);
+        break;
+      case CM.BLACK_MAN:
+        drawCircle(locX, locY, 32, FILL_BLACK_1);
+        drawCircle(locX, locY, 26, FILL_BLACK_2);
+        break;
+      case CM.WHITE_KING:
+        drawCircle(locX, locY, 32, FILL_WHITE_1);
+        drawCircle(locX, locY, 26, FILL_WHITE_3);
+        break;
+      case CM.BLACK_KING:
+        drawCircle(locX, locY, 32, FILL_BLACK_1);
+        drawCircle(locX, locY, 26, FILL_BLACK_3);
+        break;
+    }
+  }
+
+  var renderer = {
+    drawBoardState(boardState) {
+      var length = boardState.size(),
+          piece;
+      while (length--) {
+        piece = boardState.pieceAt(length);
+        if (piece !== CM.EMPTY_TILE) {
+          drawPieceInBlock(length, piece);
+        }
+      }
+    }
+  };
+
+  var bs = new CM.BoardState();
+  renderer.drawBoardState(bs);
+
+}(CheckersModule));
