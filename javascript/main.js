@@ -67,6 +67,8 @@
   };
 
   var bs = new CM.BoardState();
+  // renderer.drawBoardState(bs);
+  bs.makeMove(new CM.Move(8, CM.TOP_RIGHT));
   renderer.drawBoardState(bs);
 
 }(CheckersModule));

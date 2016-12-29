@@ -33,7 +33,7 @@ var CheckersModule = (function() {
     }
 
     function isBounded(index) {
-      if (index >= 0 && index < size) {
+      if (index >= 0 && index < 32) {
         return true;
       }
       return false;
@@ -96,10 +96,17 @@ var CheckersModule = (function() {
     var pieces = [];
 
     // Constructor
-    for (var i = 0; i < 12; i++) {
-      pieces[i] = WHITE_MAN;
-      pieces[31 - i] = BLACK_MAN;
-    }
+    (function () {
+      var i;
+      for (i = 0; i < 12; i++) {
+        pieces[i] = WHITE_MAN;
+        pieces[31 - i] = BLACK_MAN;
+      }
+
+      for (i = 12; i < 20; i++) {
+        pieces[i] = EMPTY_TILE;
+      }
+    }());
 
     this.makeMove = function(move) {
       var srcIndex = move.getSrcBlock(),
